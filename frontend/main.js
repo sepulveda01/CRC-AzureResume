@@ -5,7 +5,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 // const myAPIUrl =
 //   "https://myresumemain.azurewebsites.net/api/MyCounterFunc?code=PZGbUruoS1i0mQFffnUr5qvDRXVOA8n5wHipaTSg_HDFAzFuuwIxyA==";
-const functionApi = "http://localhost:7071/api/RCfunc";
+const functionApi = 'https://REPLACE_WITH_YOUR_FUNCTION_APP_NAME.azurewebsites.net/api/counter';
 let count = 0;
 
 const getCount = () => {
