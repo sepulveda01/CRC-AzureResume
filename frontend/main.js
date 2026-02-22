@@ -1,27 +1,35 @@
-window.addEventListener("DOMContentLoaded", (event) => {
+window.addEventListener("DOMContentLoaded", () => {
   getCount();
 });
-//when HTML gets loaded, event gets fired up and function gets called
 
-// const myAPIUrl =
-//   "https://myresumemain.azurewebsites.net/api/MyCounterFunc?code=PZGbUruoS1i0mQFffnUr5qvDRXVOA8n5wHipaTSg_HDFAzFuuwIxyA==";
-const functionApi = 'https://REPLACE_WITH_YOUR_FUNCTION_APP_NAME.azurewebsites.net/api/counter';
-let count = 0;
+const functionApi =
+  "https://REPLACE_WITH_YOUR_FUNCTION_APP_NAME.azurewebsites.net/api/counter";
 
-const getCount = () => {
-  fetch(functionApi)
-    .then((res) => {
-      return res.json();
-    })
-    .then((res) => {
-      console.log(res);
-      console.log("it's up and running");
+async function getCount() {
+  const el = document.getElementById("visit_count");
+  if (!el) return;
 
-      count = res.count;
-      console.log(count);
-      document.getElementById("visit_count").innerHTML = count;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
+  // Show placeholder while loading
+  el.innerText = "—";
+
+  try {
+    const response = await fetch(functionApi, { method: "GET" });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data && typeof data.count === "number") {
+      el.innerText = data.count;
+    } else {
+      el.innerText = "—";
+    }
+
+    console.log("Counter loaded successfully");
+  } catch (error) {
+    console.log("Counter fetch failed:", error);
+    // Leave placeholder dash if API fails
+  }
+}
