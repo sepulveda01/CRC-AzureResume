@@ -26,6 +26,6 @@ jobs:
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
-          app-name: "rcfuncv2"
+          app-name: "rcfuncv2-g0c6dsb4exc4hcdm"
           package: "backend"
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
