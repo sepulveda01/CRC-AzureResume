@@ -7,7 +7,7 @@ __pycache__/
 .venv/
 .env
 
-# Node (if it ever shows up again)
+# Node
 node_modules/
 
 # Azure Functions local settings (never commit secrets)

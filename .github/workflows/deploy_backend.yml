@@ -1,33 +1,31 @@
-name: Deploy Azure Function (Python)
+name: Deploy Azure Function (backend)
 
 on:
-  workflow_dispatch: {}
-
-env:
-  AZURE_FUNCTIONAPP_NAME: REPLACE_ME_AFTER_FUNCTION_APP_IS_CREATED
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: "backend"
-  PYTHON_VERSION: "3.12"
+  push:
+    branches: ["main"]
+    paths:
+      - "backend/**"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
+          cd backend
           python -m pip install --upgrade pip
-          pip install -r backend/requirements.txt
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
-      # Deploy step will be enabled once your Function App exists and you add the publish profile secret.
-      - name: Deploy (disabled until Azure is ready)
-        run: |
-          echo "Deployment disabled. Create Function App, then set AZURE_FUNCTIONAPP_NAME and add secret AZURE_FUNCTIONAPP_PUBLISH_PROFILE."
-          exit 0
+      - name: Deploy to Azure Functions
+        uses: Azure/functions-action@v1
+        with:
+          app-name: "rcfuncv2"
+          package: "backend"
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
