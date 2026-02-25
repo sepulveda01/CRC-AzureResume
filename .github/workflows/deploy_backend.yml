@@ -2,7 +2,7 @@ name: Deploy Azure Function (backend)
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
     paths:
       - "backend/**"
       - ".github/workflows/**"
@@ -10,23 +10,30 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Set up Python
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
 
-      - name: Install dependencies
+      - name: Install dependencies into .python_packages
         run: |
           cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
-      - name: Deploy to Azure Functions
-        uses: Azure/functions-action@v1
+      - name: Create deployment package
+        run: |
+          cd backend
+          zip -r ../backend.zip . -x "*.git*" -x "*__pycache__*" -x "*.DS_Store*"
+
+      - name: Deploy via Zip Deploy
+        uses: azure/webapps-deploy@v3
         with:
           app-name: "rcfuncv2-g0c6dsb4exc4hcdm"
-          package: "backend"
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          package: "backend.zip"
