@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const functionApi =
-  "https://REPLACE_WITH_YOUR_FUNCTION_APP_NAME.azurewebsites.net/api/counter";
+  "https://rcfuncv2-g0c6dsb4exc4hcdm.westus-01.azurewebsites.net/api/counter";
 
 async function getCount() {
   const el = document.getElementById("visit_count");
